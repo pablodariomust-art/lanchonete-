@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sabor & Cia — Lanchonete</title>
+<meta name="description" content="Cardápio da lanchonete Sabor & Cia. Monte seu pedido e envie pelo WhatsApp.">
+<link rel="preload" href="fonts/bagel-fat-one-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Bagel Fat One";src:url(fonts/bagel-fat-one-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Figtree";src:url(fonts/figtree-latin-800-normal.woff2) format("woff2");font-weight:800;font-display:swap}
+:root{
+  --mostarda:#F2B632; --tinta:#17233F; --tomate:#D0332A; --papel:#FFF9E8;
+  --tinta-suave:#4a5470;
+  --display:"Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;
+  --texto:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--mostarda);color:var(--tinta);font-family:var(--texto);font-size:1.0625rem;line-height:1.5}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--tomate);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* toldo listrado */
+.toldo{height:26px;background:repeating-linear-gradient(90deg,var(--tomate) 0 44px,var(--papel) 44px 88px);
+  -webkit-mask:radial-gradient(circle 22px at 22px 100%,transparent 98%,#000) 0 0/44px 100%;mask:radial-gradient(circle 22px at 22px 100%,transparent 98%,#000) 0 0/44px 100%}
+/* topo */
+header.topo{padding:28px 0 8px}
+.marca{font-family:var(--display);font-size:1.35rem;margin:0}
+.marca span{color:var(--tomate)}
+
+/* hero */
+.hero{padding:36px 0 56px}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(3.4rem,15vw,9rem);line-height:.92;margin:0 0 20px;letter-spacing:-.01em}
+.hero h1 .e{color:var(--tomate)}
+.hero p{max-width:34ch;font-size:1.25rem;font-weight:600;margin:0 0 24px}
+.btn{display:inline-block;background:var(--tinta);color:var(--papel);font:800 1.05rem var(--texto);padding:14px 22px;border-radius:999px;text-decoration:none;border:0;cursor:pointer}
+.btn:hover{background:var(--tomate)}
+
+/* papel do cardápio */
+.papel{background:var(--papel);border-radius:6px 6px 0 0;padding:28px 0 56px;position:relative}
+.papel::before{ /* borda recortada de comanda */
+  content:"";position:absolute;left:0;right:0;top:-10px;height:10px;
+  background:linear-gradient(135deg,var(--papel) 50%,transparent 50%) 0 0/20px 10px,
+             linear-gradient(225deg,var(--papel) 50%,transparent 50%) 0 0/20px 10px;
+}
+.layout{display:grid;gap:32px}
+@media(min-width:900px){.layout{grid-template-columns:1fr 340px;align-items:start}}
+
+.cardapio h2{font-family:var(--display);font-weight:400;font-size:2rem;margin:36px 0 6px}
+.cardapio h2:first-child{margin-top:0}
+.item{display:flex;align-items:center;gap:12px;padding:10px 0}
+.item .nome{font-weight:600}
+.item .pontos{flex:1;border-bottom:3px dotted var(--tinta);opacity:.35;min-width:16px;transform:translateY(6px)}
+.item .preco{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qtd{display:flex;align-items:center;gap:6px}
+.qtd button{width:38px;height:38px;border-radius:50%;border:2px solid var(--tinta);background:transparent;color:var(--tinta);font:800 1.25rem/1 var(--texto);cursor:pointer}
+.qtd button:hover{background:var(--tinta);color:var(--papel)}
+.qtd output{min-width:1.5ch;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.item.tem .nome{color:var(--tomate)}
+
+/* comanda */
+.comanda{background:#fff;border:2px solid var(--tinta);border-radius:6px;padding:20px;box-shadow:6px 6px 0 var(--tinta)}
+@media(min-width:900px){.comanda{position:sticky;top:20px}}
+.comanda h2{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0 0 12px}
+.comanda ul{list-style:none;margin:0 0 12px;padding:0}
+.comanda li{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed #c9c9c9}
+.comanda .vazio{color:var(--tinta-suave)}
+.total{display:flex;justify-content:space-between;font-weight:800;font-size:1.3rem;margin:12px 0 16px}
+.comanda label{display:block;font-weight:600;margin-bottom:4px}
+.comanda input{width:100%;font:inherit;padding:10px 12px;border:2px solid var(--tinta);border-radius:6px;margin-bottom:14px;background:#fff}
+.comanda .btn{width:100%;text-align:center;background:var(--tomate)}
+.comanda .btn:hover{background:var(--tinta)}
+.comanda .btn[disabled]{opacity:.45;cursor:not-allowed}
+.aviso{margin:10px 0 0;font-size:.95rem;color:var(--tomate);min-height:1.4em}
+
+/* barra fixa no celular */
+.barra{position:fixed;left:12px;right:12px;bottom:12px;z-index:5;display:none;align-items:center;justify-content:space-between;
+  gap:12px;background:var(--tinta);color:var(--papel);padding:12px 18px;border-radius:999px;text-decoration:none;font-weight:800;
+  box-shadow:0 6px 18px rgba(23,35,63,.35)}
+.barra.on{display:flex}
+@media(min-width:900px){.barra{display:none!important}}
+body{padding-bottom:0}
+/* rodapé */
+footer{margin-top:0;background:var(--tinta);color:var(--papel);padding:36px 0}
+footer .wrap{display:grid;gap:8px}
+footer strong{font-family:var(--display);font-weight:400;font-size:1.4rem}
+
+/* entrada única da página */
+@media(prefers-reduced-motion:no-preference){
+  .hero h1{animation:sobe .7s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes sobe{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  html{scroll-behavior:smooth}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="toldo" aria-hidden="true"></div>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Sabor <span class="e">&amp;</span> Cia</h1>
+    <p>Lanches, porções, salgados e bebidas. Escolha, monte o pedido e mande no WhatsApp.</p>
+    <a class="btn" href="#cardapio">Ver cardápio</a>
+  </div>
+</section>
+
+<main class="papel" id="cardapio">
+  <div class="wrap layout">
+    <div class="cardapio" id="lista" aria-label="Cardápio"></div>
+
+    <aside class="comanda" id="pedido" aria-labelledby="t-comanda">
+      <h2 id="t-comanda">Seu pedido</h2>
+      <ul id="resumo" aria-live="polite"></ul>
+      <div class="total"><span>Total</span><span id="total">R$ 0,00</span></div>
+      <label for="nome">Seu nome</label>
+      <input id="nome" type="text" autocomplete="name" placeholder="Como podemos te chamar?">
+      <button class="btn" id="enviar" type="button" disabled>Enviar pedido no WhatsApp</button>
+      <p class="aviso" id="aviso" role="status"></p>
+    </aside>
+  </div>
+</main>
+
+<a class="barra" id="barra" href="#pedido"><span id="barra-n">0 itens</span><span id="barra-t">R$ 0,00</span></a>
+
+<footer>
+  <div class="wrap">
+    <strong>Sabor &amp; Cia</strong>
+    <span id="info-horario"></span>
+    <span id="info-endereco"></span>
+  </div>
+</footer>
+
+<script>
+/* ====== CONFIGURE AQUI ======
+   WHATSAPP: número com país e DDD, só dígitos. Ex.: "5571999999999"
+   HORARIO e ENDERECO: se ficarem vazios, não aparecem no site. */
+const CONFIG = {
+  WHATSAPP: "",
+  HORARIO: "",
+  ENDERECO: ""
+};
+
+/* Preços conforme a planilha de vendas */
+const CARDAPIO = [
+  {cat:"Lanches", itens:[
+    ["X-Burger Especial",22],["X-Salada Clássico",18],["Cachorro-Quente Completo",14]]},
+  {cat:"Porções", itens:[["Batata Frita Média",12]]},
+  {cat:"Salgados", itens:[["Coxinha de Frango",7.5],["Pastel de Carne",8]]},
+  {cat:"Bebidas", itens:[
+    ["Refrigerante Lata 350ml",6],["Suco Natural 500ml",9],["Milkshake de Chocolate",16]]},
+  {cat:"Sobremesas", itens:[["Açaí na Tigela 300ml",15]]}
+];
+
+const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const qtd = {};           // nome -> quantidade
+const preco = {};         // nome -> preço
+const $ = id => document.getElementById(id);
+
+function montarCardapio(){
+  const raiz = $("lista");
+  CARDAPIO.forEach(({cat,itens})=>{
+    const h = document.createElement("h2"); h.textContent = cat; raiz.appendChild(h);
+    itens.forEach(([nome,p])=>{
+      preco[nome]=p; qtd[nome]=0;
+      const el = document.createElement("div"); el.className="item"; el.dataset.nome=nome;
+      el.innerHTML = `
+        <span class="nome"></span><span class="pontos" aria-hidden="true"></span>
+        <span class="preco">${brl(p)}</span>
+        <span class="qtd">
+          <button type="button" data-d="-1" aria-label="Tirar um"></button>
+          <output aria-live="polite">0</output>
+          <button type="button" data-d="1" aria-label="Adicionar um"></button>
+        </span>`;
+      el.querySelector(".nome").textContent = nome;
+      const [menos,mais] = el.querySelectorAll("button");
+      menos.textContent="−"; mais.textContent="+";
+      menos.setAttribute("aria-label",`Tirar um ${nome}`);
+      mais.setAttribute("aria-label",`Adicionar um ${nome}`);
+      raiz.appendChild(el);
+    });
+  });
+  raiz.addEventListener("click",e=>{
+    const b = e.target.closest("button[data-d]"); if(!b) return;
+    const item = b.closest(".item"), n = item.dataset.nome;
+    qtd[n] = Math.max(0,(qtd[n]||0)+Number(b.dataset.d));
+    item.querySelector("output").textContent = qtd[n];
+    item.classList.toggle("tem",qtd[n]>0);
+    atualizar();
+  });
+}
+
+function pedido(){ return Object.keys(qtd).filter(n=>qtd[n]>0); }
+
+function atualizar(){
+  const ul = $("resumo"); ul.replaceChildren();
+  const itens = pedido();
+  if(!itens.length){
+    const li=document.createElement("li"); li.className="vazio";
+    li.textContent="Toque no + para adicionar itens."; ul.appendChild(li);
+  }
+  let total=0;
+  itens.forEach(n=>{
+    const sub = qtd[n]*preco[n]; total+=sub;
+    const li=document.createElement("li");
+    const a=document.createElement("span"); a.textContent=`${qtd[n]}× ${n}`;
+    const b=document.createElement("span"); b.textContent=brl(sub);
+    li.append(a,b); ul.appendChild(li);
+  });
+  $("total").textContent = brl(total);
+  $("enviar").disabled = itens.length===0;
+  const n = itens.reduce((a,k)=>a+qtd[k],0);
+  $("barra-n").textContent = n+(n===1?" item · ver pedido":" itens · ver pedido");
+  $("barra-t").textContent = brl(total);
+  $("barra").classList.toggle("on",n>0);
+  $("aviso").textContent = "";
+}
+
+$("enviar").addEventListener("click",()=>{
+  const itens = pedido(); if(!itens.length) return;
+  const nome = $("nome").value.trim();
+  let total=0;
+  const linhas = itens.map(n=>{ total+=qtd[n]*preco[n]; return `${qtd[n]}x ${n} - ${brl(qtd[n]*preco[n])}`; });
+  const msg = `Olá! Quero fazer um pedido${nome?` (${nome})`:""}:\n\n${linhas.join("\n")}\n\nTotal: ${brl(total)}`;
+  if(!CONFIG.WHATSAPP){
+    $("aviso").textContent="O número do WhatsApp ainda não foi configurado neste site.";
+    return;
+  }
+  window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank","noopener");
+});
+
+if(CONFIG.HORARIO)  $("info-horario").textContent  = "Horário: "+CONFIG.HORARIO;
+if(CONFIG.ENDERECO) $("info-endereco").textContent = "Endereço: "+CONFIG.ENDERECO;
+
+montarCardapio(); atualizar();
+</script>
+</body>
+</html>
